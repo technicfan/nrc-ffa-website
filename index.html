@@ -11,6 +11,9 @@
             #rank {
                 display: block;
             }
+            #xp {
+                text-decoration: underline;
+            }
         </style>
             <div id="nav">
                 <button onclick="switch_view()"><</button>
@@ -22,12 +25,13 @@
                     <tr>
                         <td>Platz</td>
                         <td>Name</td>
-                        <td>XP</td>
-                        <td>Kills</td>
-                        <td>Killstreak</td>
-                        <td>Kopfgeld</td>
+                        <td class="rank_col" id="xp" onclick="new_sort_rank(this)">XP</td>
+                        <td class="rank_col" id="kills" onclick="new_sort_rank(this)">Kills</td>
+                        <td class="rank_col" id="currentKillStreak" onclick="new_sort_rank(this)">Killstreak</td>
+                        <td class="rank_col" id="bounty" onclick="new_sort_rank(this)">Kopfgeld</td>
                     </tr>
                 </table>
+                <button id="load_more" onclick="fill_rank()">Mehr laden</button>
             </div>
             <div id="stats">
                 <input id="input" type="text" placeholder="name / uuid">
@@ -74,16 +78,29 @@
                 }
             }
 
-            async function fill_rank(sort_by="xp"){
+            async function fill_rank(sort_by="kills"){
                 const response = await fetch(`https://api.hglabor.de/stats/ffa/top?sort=${sort_by}`)
                 if (response.ok){
                     const list = await response.json()
-                    all_html = await Promise.all(
-                        list.slice(0, 15).map(async (item, index) => {
-                            return add_rank_item(index + 1, item)
+                    var start = 15 * new_loads
+                    if (start + 15 >= list.length){
+                        document.getElementById("load_more").style.display = "none"
+                    }
+                    var table = document.getElementById("ranks_table")
+                    await Promise.all(
+                        list.slice(start, start + 15).map(async (item, index) => {
+                            row = table.insertRow(-1)
+                            row.className = "rank_row"
+                            row.innerHTML = await add_rank_item(index + 1 + start, item)
                         })
                     )
-                    document.getElementById("ranks_table").innerHTML += all_html.join("")
+                    document.querySelectorAll(".rank_name").forEach(name => { name.addEventListener("click", event => {
+                            document.getElementById("input").value = event.target.innerText
+                            switch_view()
+                            load_stats()
+                        })
+                    })
+                    new_loads += 1
                 }
             }
 
@@ -92,7 +109,7 @@
                 html = `
                 <tr>
                     <td>${id}</td>
-                    <td>${name[1]}</td>
+                    <td class="rank_name">${name[1]}</td>
                     <td>${player.xp}</td>
                     <td>${player.kills}</td>
                     <td>${player.currentKillStreak}</td>
@@ -133,6 +150,20 @@
                 }
             }
 
+            function new_sort_rank(e){
+                document.querySelectorAll(".rank_row").forEach(row => { 
+                    document.getElementById("ranks_table").deleteRow(row.rowIndex)
+                })
+                document.querySelectorAll(".rank_col").forEach(element => {
+                    element.style.setProperty("text-decoration", "none")
+                })
+                e.style.setProperty("text-decoration", "underline")
+                
+                new_loads = 0
+                fill_rank(e.id)
+            }
+
+            var new_loads = 0
             fill_rank()
         </script>
     </body>
