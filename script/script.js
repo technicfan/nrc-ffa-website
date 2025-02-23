@@ -9,7 +9,7 @@ async function get_player(id){
 }
 
 async function fill_rank(){
-    if (!list || (page <= Math.floor((rank_item_number-10)/100))){
+    if (!list || (page === Math.floor((rank_item_number)/100))){
         list = await load_top(sort)
     }
     var start = rank_item_number - (page - 1) * 100
@@ -173,7 +173,7 @@ if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matc
     document.documentElement.setAttribute("data-bs-theme", "light")
 }
 let rank_item_number = 0
-let page
+let page = 1
 let list = null
 let sort = "kills"
 
