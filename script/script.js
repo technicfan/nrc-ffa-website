@@ -1,8 +1,8 @@
 async function get_player(id){
-    const response = await fetch(`https://api.ashcon.app/mojang/v2/user/${id}`)
+    const response = await fetch(`https://playerdb.co/api/player/minecraft/${id}`)
     if (response.ok){
         let player = await response.json()
-        return [player.uuid, player.username]
+        return [player.data.player.id, player.data.player.username]
     } else {
         throw new Error(`Spieler ${id} nicht gefunden`)
     }
