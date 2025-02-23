@@ -53,17 +53,17 @@ async function add_rank_item(number, player){
     }
     html = `
     <tr>
-        <td class="align-middle text-center"><span ${color}>${number}</span></td>
-        <td class="rank_name align-middle" data-id="${name[0]}">
+        <td class="align-middle"><span ${color}>${number}</span></td>
+        <td class="rank_name align-middle text-start" data-id="${name[0]}">
             <image class="rounded d-inline" alt="Minecraft Kopf von ${name[1]}"
                    src="https://www.mc-heads.net/avatar/${name[0]}/35"
                    style="margin-right: 6pt;"
             >${name[1]}
         </td>
-        <td class="align-middle text-center">${player.kills}</td>
-        <td class="align-middle text-center">${player.xp}</td>
-        <td class="align-middle text-center">${player.currentKillStreak}</td>
-        <td class="align-middle text-center">${player.bounty}</td>
+        <td class="align-middle">${player.kills}</td>
+        <td class="align-middle">${player.xp}</td>
+        <td class="align-middle">${player.currentKillStreak}</td>
+        <td class="align-middle">${player.bounty}</td>
     <tr>
     `
     return html
@@ -87,12 +87,10 @@ async function load_stats(id=""){
             var player = await response.json()
         } catch {
             document.getElementById("stats_spinner").classList.add("d-none")
-            document.getElementById("stats_error").innerText = `
-            ${input}
+            document.getElementById("stats_error").innerText = `${input}
             existiert nicht
             oder hat noch nie
-            HeroFFA gespielt.
-            `
+            HeroFFA gespielt.`
             document.getElementById("stats_error").classList.remove("d-none")
             return
         }

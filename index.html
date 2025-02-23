@@ -9,43 +9,45 @@
         <link rel="stylesheet" href="style/style.css">
     </head>
     <body>
-        <div id="wrapper">
-            <div id="main" class="d-flex justify-content-center">
-                <div id="content">
-                    <div id="logo" class="d-flex justify-content-center">
-                        <img src="image/logo.png" width="275" alt="HeroFFA Logo im Pokemon Stil">
+        <div id="wrapper" class="d-flex">
+            <div id="content">
+                <div id="logo" class="d-flex justify-content-center">
+                    <img src="image/logo.png" width="275" alt="HeroFFA Logo im Pokemon Stil">
+                </div>
+                <div id="nav" class="d-flex justify-content-center">
+                    <div class="btn-group" role="group" aria-label="Navigation">
+                        <button id="to_rank" type="button" class="btn btn-info active" onclick="to_page('rank')">Rangliste</button>
+                        <button id="to_stats" type="button" class="btn btn-info" onclick="to_page('stats')">Spielersuche</button>
                     </div>
-                    <div id="nav" class="d-flex justify-content-center">
-                        <div class="btn-group" role="group" aria-label="Navigation">
-                            <button id="to_rank" type="button" class="btn btn-info active" onclick="to_page('rank')">Rangliste</button>
-                            <button id="to_stats" type="button" class="btn btn-info" onclick="to_page('stats')">Spielersuche</button>
-                        </div>
+                </div>
+                <div id="rank">
+                    <div class="table-responsive text-center">
+                        <table id="rank_table_real" class="table table-striped d-inline-block text-nowrap">
+                            <thead>
+                                <th></th>
+                                <th class="text-center">Spieler*in</th>
+                                <th class="rank_col text-center" id="kills" onclick="loading_rank(new_sort_rank)(this)">Kills</th>
+                                <th class="rank_col text-center" id="xp" onclick="loading_rank(new_sort_rank)(this)">XP</th>
+                                <th class="rank_col text-center" id="currentKillStreak" onclick="loading_rank(new_sort_rank)(this)">Killstreak</th>
+                                <th class="rank_col text-center" id="bounty" onclick="loading_rank(new_sort_rank)(this)">Kopfgeld</th>
+                            </thead>
+                            <tbody id="rank_table">
+                            </tbody>
+                        </table>
                     </div>
-                    <div id="rank">
-                        <div class="overflow-x-scroll">
-                            <table class="table table-striped">
-                                <thead>
-                                    <th></th>
-                                    <th class="text-center">Spieler*in</th>
-                                    <th class="rank_col text-center" id="kills" onclick="loading_rank(new_sort_rank)(this)">Kills</th>
-                                    <th class="rank_col text-center" id="xp" onclick="loading_rank(new_sort_rank)(this)">XP</th>
-                                    <th class="rank_col text-center" id="currentKillStreak" onclick="loading_rank(new_sort_rank)(this)">Killstreak</th>
-                                    <th class="rank_col text-center" id="bounty" onclick="loading_rank(new_sort_rank)(this)">Kopfgeld</th>
-                                </thead>
-                                <tbody id="rank_table">
-                                </tbody>
-                            </table>
+                    <div class="d-flex justify-content-center">
+                        <button id="load_more" class="btn btn-info" type="button" onclick="loading_rank(fill_rank)()">Mehr laden</button>
+                    </div>
+                </div>
+                <div id="stats" class="d-none">
+                    <div class="d-flex justify-content-center">
+                        <input class="form-control" id="input" type="text" placeholder="Name / UUID">
+                    </div>
+                    <div id="stats_data" class="d-none">
+                        <div class="d-flex justify-content-center">
+                            <img id="stats_head" class="rounded" src="https://www.mc-heads.net/avatar/noriskk/100" alt="Minecraft Kopf von Noriskk">
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button id="load_more" class="btn btn-info" type="button" onclick="loading_rank(fill_rank)()">Mehr laden</button>
-                        </div>
-                    </div>
-                    <div id="stats" class="d-none">
-                        <input class="form-control" id="input" type="text" placeholder="Name / UUID">
-                        <div id="stats_data" class="d-none">
-                            <div class="d-flex justify-content-center">
-                                <img id="stats_head" class="rounded" src="https://www.mc-heads.net/avatar/noriskk/100" alt="Minecraft Kopf von Noriskk">
-                            </div>
                             <table class="table table-striped" id="main_stats_table">
                                 <tr>
                                     <td>Name:</td>
@@ -77,13 +79,15 @@
                                 </tr>
                             </table>
                         </div>
-                        <div id="stats_spinner" class="d-flex justify-content-center m-5 d-none">
-                            <div class="spinner-border" role="status">
-                                <span class="visually-hidden">Lade gerade...</span>
-                            </div>
+                    </div>
+                    <div id="stats_spinner" class="d-flex justify-content-center m-5 d-none">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Lade gerade...</span>
                         </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
                         <div id="stats_error"
-                             class="d-flex justify-content-center m-5 d-none alert alert-warning text-center" 
+                             class="m-5 d-none alert alert-warning text-center" 
                              role="alert"
                         ></div>
                     </div>

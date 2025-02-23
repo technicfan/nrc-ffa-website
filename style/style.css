@@ -5,6 +5,7 @@
     cursor: pointer;
 }
 #load_more {
+    margin-top: 0.6cm;
     margin-bottom: 0.75cm;
 }
 #logo {
@@ -22,12 +23,14 @@ html, body {
 }
 #wrapper {
     min-height: 100%;
-    display: flex;
     flex-direction: column;
 }
 #stats_head {
     margin: .75cm;
 }
-input {
-    max-width: initial;
+.form-control, #stats_error, #rank_table_real, #main_stats_table {
+    width: fit-content;
+}
+#rank_table_real {
+    margin: 0;
 }
