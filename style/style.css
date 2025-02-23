@@ -1,0 +1,33 @@
+#kills {
+    text-decoration: underline;
+}
+.rank_col, .rank_name {
+    cursor: pointer;
+}
+#load_more {
+    margin-bottom: 0.75cm;
+}
+#logo {
+    image-rendering: pixelated;
+    margin-top: .65cm;
+}
+#nav {
+    margin: 0.75cm;
+}
+footer {
+    margin-top: auto;
+}
+html, body {
+    height: 100%;
+}
+#wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#stats_head {
+    margin: .75cm;
+}
+input {
+    max-width: initial;
+}
