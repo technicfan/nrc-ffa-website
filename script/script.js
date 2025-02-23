@@ -124,7 +124,6 @@ function to_page(page){
 
 async function load_top(sort_by){
     page = Math.floor(rank_item_number/100)+1
-    console.log(page)
     const response = await fetch(`https://api.hglabor.de/stats/ffa/top?sort=${sort_by}&page=${page}`)
     if (response.ok){
         const top = await response.json()
