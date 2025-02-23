@@ -22,18 +22,20 @@
                         </div>
                     </div>
                     <div id="rank">
-                        <table class="table table-striped table-responsive">
-                            <thead>
-                                <th></th>
-                                <th class="text-center">Spieler*in</th>
-                                <th class="rank_col text-center" id="kills" onclick="loading_rank(new_sort_rank)(this)">Kills</th>
-                                <th class="rank_col text-center" id="xp" onclick="loading_rank(new_sort_rank)(this)">XP</th>
-                                <th class="rank_col text-center" id="currentKillStreak" onclick="loading_rank(new_sort_rank)(this)">Killstreak</th>
-                                <th class="rank_col text-center" id="bounty" onclick="loading_rank(new_sort_rank)(this)">Kopfgeld</th>
-                            </thead>
-                            <tbody id="rank_table">
-                            </tbody>
-                        </table>
+                        <div class="overflow-x-scroll">
+                            <table class="table table-striped">
+                                <thead>
+                                    <th></th>
+                                    <th class="text-center">Spieler*in</th>
+                                    <th class="rank_col text-center" id="kills" onclick="loading_rank(new_sort_rank)(this)">Kills</th>
+                                    <th class="rank_col text-center" id="xp" onclick="loading_rank(new_sort_rank)(this)">XP</th>
+                                    <th class="rank_col text-center" id="currentKillStreak" onclick="loading_rank(new_sort_rank)(this)">Killstreak</th>
+                                    <th class="rank_col text-center" id="bounty" onclick="loading_rank(new_sort_rank)(this)">Kopfgeld</th>
+                                </thead>
+                                <tbody id="rank_table">
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="d-flex justify-content-center">
                             <button id="load_more" class="btn btn-info" type="button" onclick="loading_rank(fill_rank)()">Mehr laden</button>
                         </div>

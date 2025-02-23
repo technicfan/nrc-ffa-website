@@ -9,11 +9,12 @@ async function get_player(id){
 }
 
 async function fill_rank(){
-    if (!list){
+    if (Math.floor(rank_item_number/100) != Math.floor((rank_item_number-10)/100)){
         list = await load_top(sort)
     }
+    var start = rank_item_number - (page - 1) * 100
     let rows_html = await Promise.all(
-        list.slice(rank_item_number, rank_item_number + 10).map(async (item, index) => {
+        list.slice(start, start + 10).map(async (item, index) => {
             html = await add_rank_item(index + 1 + rank_item_number, item)
             return html
         })
@@ -122,7 +123,9 @@ function to_page(page){
 }
 
 async function load_top(sort_by){
-    const response = await fetch(`https://api.hglabor.de/stats/ffa/top?sort=${sort_by}`)
+    page = Math.floor(rank_item_number/100)+1
+    console.log(page)
+    const response = await fetch(`https://api.hglabor.de/stats/ffa/top?sort=${sort_by}&page=${page}`)
     if (response.ok){
         const top = await response.json()
         return top
@@ -142,7 +145,7 @@ async function new_sort_rank(e){
     
     rank_item_number = 0
     document.getElementById("load_more").classList.remove("d-none")
-    if (e.id != sort){
+    if (e.id != sort || page > 1){
         list = await load_top(e.id)
         sort = e.id
     }
@@ -158,9 +161,6 @@ function loading_rank(fn){
 
         await fn.apply(this, arguments)
 
-        if (rank_item_number >= list.length){
-            button.classList.add("d-none")
-        }
         if (rank_item_number >= 10){
             document.querySelector("footer").style.removeProperty("positon")
             document.querySelector("footer").style.removeProperty("bottom")
@@ -174,6 +174,7 @@ if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matc
     document.documentElement.setAttribute("data-bs-theme", "light")
 }
 let rank_item_number = 0
+let page
 let list = null
 let sort = "kills"
 
