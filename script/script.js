@@ -9,7 +9,7 @@ async function get_player(id){
 }
 
 async function fill_rank(){
-    if (Math.floor(rank_item_number/100) != Math.floor((rank_item_number-10)/100)){
+    if (!list || (page <= Math.floor((rank_item_number-10)/100))){
         list = await load_top(sort)
     }
     var start = rank_item_number - (page - 1) * 100
