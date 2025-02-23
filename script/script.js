@@ -136,8 +136,14 @@ async function load_stats(id=""){
                 }
                 let row = table.insertRow(-1)
                 row.innerHTML = `
-                    <td>${ability_display}</td>
-                    <td></td>
+                    <td>
+                        <table class="table">
+                            <thead>
+                                <th>${ability_display}</th>
+                            </thead>
+                            <tbody id="${ability}_table"></tbody>
+                        </table>
+                    </td>
                 `
                 for (const attribute of attributes){
                     if (attribute.maxLevel != 0){
@@ -160,9 +166,9 @@ async function load_stats(id=""){
                             var level_string = ""
                         }
 
-                        let row = table.insertRow(-1)
+                        var ability_table = document.getElementById(`${ability}_table`)
+                        let row = ability_table.insertRow(-1)
                         row.innerHTML = `
-                            <td></td>
                             <td>
                                 <div>${attribute.name}</div>
                                 <div class="d-flex">

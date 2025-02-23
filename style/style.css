@@ -28,7 +28,7 @@ html, body {
 #stats_head {
     margin: .75cm;
 }
-.form-control, #stats_error, #rank_table_real, #main_stats_table {
+.form-control, #stats_error, #rank_table_real, #main_stats_table, #aang_table_real, #katara_table_real, #toph_table_real {
     width: fit-content;
 }
 #rank_table_real {
