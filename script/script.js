@@ -103,8 +103,104 @@ async function load_stats(id=""){
         document.getElementById("stats_deaths").innerText = player.deaths
         document.getElementById("stats_bounty").innerText = player.bounty
 
-        document.getElementById("stats_head").src = `https://www.mc-heads.net/avatar/${id}/100`
+        document.getElementById("stats_head").src = `https://www.mc-heads.net/body/${id}/100`
         document.getElementById("stats_head").alt = `Minecraft Kopf von ${name}`
+
+        // hero abilities
+        var roman_numerals = {
+            0: "",
+            1: "I",
+            2: "II",
+            3: "III",
+            4: "IV",
+            5: "V",
+            6: "VI",
+            7: "VII",
+            8: "VIII",
+            9: "IX",
+            10: "X"
+        }
+        for (const hero in heroes){
+            var current = heroes[hero]
+            var abilities = current.properties
+            var div = document.getElementById(`${hero}_div`)
+            div.innerHTML = ""
+            for (const ability in abilities){
+                if (player.heroes[hero][ability]){
+                    var attributes = abilities[ability]
+
+                    var ability_display = ability.split("_").map(part => {
+                        return part.charAt(0).toUpperCase() + part.slice(1)
+                    }).join(" ")
+
+                    div.innerHTML += `
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${ability}_item" aria-expanded="false" aria-controls="${ability}_item">
+                                ${ability_display}
+                                </button>
+                            </h2>
+                            <div id="${ability}_item" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    <table class="table table-border" id="${ability}_table" style="width: 100%;"></table>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                    var ability_table = document.getElementById(`${ability}_table`)
+                    for (const attribute of attributes){
+                        if (attribute.maxLevel != 0){
+                            try {
+                                var attribute_name = attribute.name.replace(/ /g, "_").toLowerCase()
+                                var level_raw = Math.cbrt(player.heroes[hero][ability][attribute_name].experiencePoints / attribute.levelScale)
+                                var level = Math.trunc(level_raw)
+                                var level_string =  roman_numerals[level]
+                                if (attribute.maxLevel > level){
+                                    var to_next = (level_raw - level) * 100
+                                    var next_level_string = roman_numerals[level+1]
+                                } else {
+                                    var to_next = 100
+                                    var next_level_string = "<span class='badge text-bg-warning'>max</span> " + level_string
+                                    level_string = ""
+                                }
+                            } catch (undefined) {
+                                var to_next = 0
+                                var next_level_string = roman_numerals[1]
+                                var level_string = ""
+                            }
+
+                            var value = attribute.baseValue
+                            if (level != 0){
+                                switch(attribute.modifier.type.split(".").at(-1)){
+                                    case "AddValueTotal":
+                                        attribute.modifier.steps.slice(0, level).forEach(step => {
+                                            value += step
+                                        })
+                                        break
+                                    case "MultiplyBase":
+                                        value *= attribute.modifier.steps[level - 1]
+                                        break
+                                }
+                            }
+
+                            let row = ability_table.insertRow(-1)
+                            row.innerHTML = `
+                                <td>
+                                    <div class="d-flex mb-2 " style="width: 100%; justify-content: space-between;">
+                                        <span class" d-inline-block">${level_string}</span>
+                                        <span class="d-inline-block">${attribute.name}: ${value}${attribute.type.split(".").at(-1) === "CooldownProperty" ? "s" : ""}</span>
+                                        <span class="d-inline-block">${next_level_string}</span>
+                                    </div>
+                                    <div class="progress" role="progressbar" aria-label="${attribute.name} Fortschritt" aria-valuenow="${to_next}" aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar" style="width: ${to_next}%">${Math.round(to_next)}%</div>
+                                    </div>
+                                </td>
+                            `
+                        }
+                    }
+                }
+            }
+        } 
 
         document.getElementById("stats_spinner").classList.add("d-none")
         document.getElementById("stats_data").classList.remove("d-none")
@@ -118,6 +214,15 @@ function to_page(page){
     document.getElementById(`to_${page}`).classList.add("active")
     document.getElementById(`to_${other}`).classList.remove("active")
     document.title = page === "rank" ? "HeroFFA Rangliste" : "HeroFFA Spielersuche"
+}
+
+function to_hero(hero){
+    for (var name in heroes){
+        document.getElementById(name).classList.add("d-none")
+        document.getElementById(`to_${name}`).classList.remove("active")
+    }
+    document.getElementById(hero).classList.remove("d-none")
+    document.getElementById(`to_${hero}`).classList.add("active")
 }
 
 async function load_top(sort_by){
@@ -167,18 +272,33 @@ function loading_rank(fn){
     }
 }
 
-if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches){
-    document.documentElement.setAttribute("data-bs-theme", "light")
+async function load_hero(hero){
+    const response = await fetch(`https://api.hglabor.de/ffa/hero/${hero}`)
+    if (!response.ok) throw new Error("Konnte Held*in nicht fetchen")
+    heroes[hero] = await response.json()
 }
+
+
 let rank_item_number = 0
 let page = 1
 let list = null
 let sort = "kills"
+let heroes = {}
 
-document.getElementById("input").addEventListener("keypress", event => {
-    if (event.key === "Enter") {
-        load_stats()
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches){
+        document.documentElement.setAttribute("data-bs-theme", "light")
     }
-})
 
-loading_rank(fill_rank)()
+    document.getElementById("input").addEventListener("keypress", event => {
+        if (event.key === "Enter") {
+            load_stats()
+        }
+    })
+
+    loading_rank(fill_rank)()
+
+    load_hero("aang")
+    load_hero("katara")
+    load_hero("toph")
+})

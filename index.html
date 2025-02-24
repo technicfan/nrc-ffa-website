@@ -44,40 +44,62 @@
                         <input class="form-control" id="input" type="text" placeholder="Name / UUID">
                     </div>
                     <div id="stats_data" class="d-none">
-                        <div class="d-flex justify-content-center">
-                            <img id="stats_head" class="rounded" src="https://www.mc-heads.net/avatar/noriskk/100" alt="Minecraft Kopf von Noriskk">
+                        <div class="d-flex justify-content-center mt-4">
+                            <div>
+                                <img id="stats_head" class="d-inline align-middle me-5" src="https://www.mc-heads.net/body/noriskk/100" alt="Minecraft Kopf von Noriskk">
+                                <table class="table table-striped d-inline" id="main_stats_table">
+                                    <tr>
+                                        <td>Name:</td>
+                                        <td id="stats_name"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>XP:</td>
+                                        <td id="stats_xp"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kills:</td>
+                                        <td id="stats_kills"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Killstreak:</td>
+                                        <td id="stats_streak"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>max. Killstreak:</td>
+                                        <td id="stats_max_streak"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tode:</td>
+                                        <td id="stats_deaths"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kopfgeld (XP):</td>
+                                        <td id="stats_bounty"></td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-center">
-                            <table class="table table-striped" id="main_stats_table">
-                                <tr>
-                                    <td>Name:</td>
-                                    <td id="stats_name"></td>
-                                </tr>
-                                <tr>
-                                    <td>XP:</td>
-                                    <td id="stats_xp"></td>
-                                </tr>
-                                <tr>
-                                    <td>Kills:</td>
-                                    <td id="stats_kills"></td>
-                                </tr>
-                                <tr>
-                                    <td>Killstreak:</td>
-                                    <td id="stats_streak"></td>
-                                </tr>
-                                <tr>
-                                    <td>max. Killstreak:</td>
-                                    <td id="stats_max_streak"></td>
-                                </tr>
-                                <tr>
-                                    <td>Tode:</td>
-                                    <td id="stats_deaths"></td>
-                                </tr>
-                                <tr>
-                                    <td>Kopfgeld (XP):</td>
-                                    <td id="stats_bounty"></td>
-                                </tr>
-                            </table>
+                        <div id="hero_nav" class="d-flex justify-content-center mt-4">
+                            <div class="btn-group" role="group" aria-label="Navigation">
+                                <button id="to_aang" type="button" class="btn btn-primary active" onclick="to_hero('aang')">Aang</button>
+                                <button id="to_katara" type="button" class="btn btn-primary" onclick="to_hero('katara')">Katara</button>
+                                <button id="to_toph" type="button" class="btn btn-primary" onclick="to_hero('toph')">Toph</button>
+                            </div>
+                        </div>
+                        <div id="aang">
+                            <div class="d-flex justify-content-center text-center">
+                                <div class="accordion m-4" id="aang_div"></div>
+                            </div>
+                        </div>
+                        <div id="katara" class="d-none">
+                            <div class="d-flex justify-content-center text-center">
+                                <div class="accordion m-4" id="katara_div"></div>
+                            </div>
+                        </div>
+                        <div id="toph" class="d-none">
+                             <div class="d-flex justify-content-center text-center">
+                                <div class="accordion m-4" id="toph_div"></div>
+                            </div>     
                         </div>
                     </div>
                     <div id="stats_spinner" class="d-flex justify-content-center m-5 d-none">

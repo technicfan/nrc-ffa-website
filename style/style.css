@@ -31,6 +31,9 @@ html, body {
 .form-control, #stats_error, #rank_table_real, #main_stats_table {
     width: fit-content;
 }
+#aang_div, #katara_div, #toph_div {
+    width: 12.5cm;
+}
 #rank_table_real {
     margin: 0;
 }
