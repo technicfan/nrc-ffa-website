@@ -131,7 +131,13 @@ async function load_stats(id=""){
                         for (const attribute of abilities[ability]){
                             if (attribute.maxLevel != 0){
                                 let attribute_name = attribute.name.replace(/ /g, "_").toLowerCase()
-                                add_attribute(attribute, player.heroes[hero][ability][attribute_name].experiencePoints, ability_table)
+                                var xp
+                                if (player.heroes[hero][ability][attribute_name]){
+                                    xp = player.heroes[hero][ability][attribute_name].experiencePoints
+                                } else {
+                                    xp = 0
+                                }
+                                add_attribute(attribute, xp, ability_table)
                             }
                         }
                     }
