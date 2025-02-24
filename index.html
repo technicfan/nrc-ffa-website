@@ -43,11 +43,11 @@
                     <div class="d-flex justify-content-center">
                         <input class="form-control" id="input" type="text" placeholder="Name / UUID">
                     </div>
-                    <div id="stats_data" class="d-none">
-                        <div class="d-flex justify-content-center mt-4">
-                            <div>
-                                <img id="stats_head" class="d-inline align-middle me-5" src="https://www.mc-heads.net/body/noriskk/100" alt="Minecraft Kopf von Noriskk">
-                                <table class="table table-striped d-inline" id="main_stats_table">
+                    <div id="stats_data" class="text-center d-none">
+                        <div class="mt-4 g-col-4">
+                            <div style="justify-content: space-evenly;">
+                                <img id="stats_skin" class="d-inline-block me-5" src="https://www.mc-heads.net/body/noriskk/100" alt="Minecraft Kopf von Noriskk">
+                                <table class="table table-striped d-inline-block" id="main_stats_table">
                                     <tr>
                                         <td>Name:</td>
                                         <td id="stats_name"></td>
@@ -79,27 +79,11 @@
                                 </table>
                             </div>
                         </div>
-                        <div id="hero_nav" class="d-flex justify-content-center mt-4">
-                            <div class="btn-group" role="group" aria-label="Navigation">
-                                <button id="to_aang" type="button" class="btn btn-primary active" onclick="to_hero('aang')">Aang</button>
-                                <button id="to_katara" type="button" class="btn btn-primary" onclick="to_hero('katara')">Katara</button>
-                                <button id="to_toph" type="button" class="btn btn-primary" onclick="to_hero('toph')">Toph</button>
+                        <div id="hero_data" class="g-col-4">
+                            <div id="hero_nav" class="mt-4">
+                                <div id="hero_buttons" class="btn-group" role="group" aria-label="Heldenumschaltung">
+                                </div>
                             </div>
-                        </div>
-                        <div id="aang">
-                            <div class="d-flex justify-content-center text-center">
-                                <div class="accordion m-4" id="aang_div"></div>
-                            </div>
-                        </div>
-                        <div id="katara" class="d-none">
-                            <div class="d-flex justify-content-center text-center">
-                                <div class="accordion m-4" id="katara_div"></div>
-                            </div>
-                        </div>
-                        <div id="toph" class="d-none">
-                             <div class="d-flex justify-content-center text-center">
-                                <div class="accordion m-4" id="toph_div"></div>
-                            </div>     
                         </div>
                     </div>
                     <div id="stats_spinner" class="d-flex justify-content-center m-5 d-none">

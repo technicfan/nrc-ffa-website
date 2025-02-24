@@ -25,8 +25,9 @@ html, body {
     min-height: 100%;
     flex-direction: column;
 }
-#stats_head {
+#stats_skin {
     margin: .75cm;
+    margin-left: 0;
 }
 .form-control, #stats_error, #rank_table_real, #main_stats_table {
     width: fit-content;

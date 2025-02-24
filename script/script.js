@@ -36,6 +36,12 @@ async function fill_rank(){
         load_stats(field.dataset.id)
     })})
     rank_item_number += 10
+
+    if (rank_item_number - 100 * (page - 1) > list.length){
+        return true
+    } else {
+        return false
+    }
 }
 
 async function add_rank_item(number, player){
@@ -103,101 +109,29 @@ async function load_stats(id=""){
         document.getElementById("stats_deaths").innerText = player.deaths
         document.getElementById("stats_bounty").innerText = player.bounty
 
-        document.getElementById("stats_head").src = `https://www.mc-heads.net/body/${id}/100`
-        document.getElementById("stats_head").alt = `Minecraft Kopf von ${name}`
+        document.getElementById("stats_skin").src = `https://www.mc-heads.net/body/${id}/100`
+        document.getElementById("stats_skin").alt = `Minecraft Kopf von ${name}`
 
         // hero abilities
-        var roman_numerals = {
-            0: "",
-            1: "I",
-            2: "II",
-            3: "III",
-            4: "IV",
-            5: "V",
-            6: "VI",
-            7: "VII",
-            8: "VIII",
-            9: "IX",
-            10: "X"
-        }
+        var set_hero = true
         for (const hero in heroes){
             if (player.heroes[hero]){
                 document.getElementById(`to_${hero}`).disabled = false
+                if (set_hero != false) {
+                    to_hero(hero)
+                    set_hero = false
+                }
                 var current = heroes[hero]
                 var abilities = current.properties
                 var div = document.getElementById(`${hero}_div`)
                 div.innerHTML = ""
                 for (const ability in abilities){
                     if (player.heroes[hero][ability]){
-                        var attributes = abilities[ability]
-
-                        var ability_display = ability.split("_").map(part => {
-                            return part.charAt(0).toUpperCase() + part.slice(1)
-                        }).join(" ")
-
-                        div.innerHTML += `
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${ability}_item" aria-expanded="false" aria-controls="${ability}_item">
-                                    ${ability_display}
-                                    </button>
-                                </h2>
-                                <div id="${ability}_item" class="accordion-collapse collapse">
-                                    <div class="accordion-body">
-                                        <table class="table table-border" id="${ability}_table" style="width: 100%;"></table>
-                                    </div>
-                                </div>
-                            </div>
-                        `
-                        var ability_table = document.getElementById(`${ability}_table`)
-                        for (const attribute of attributes){
+                        var ability_table = add_ability(ability, div)
+                        for (const attribute of abilities[ability]){
                             if (attribute.maxLevel != 0){
-                                try {
-                                    var attribute_name = attribute.name.replace(/ /g, "_").toLowerCase()
-                                    var level_raw = Math.cbrt(player.heroes[hero][ability][attribute_name].experiencePoints / attribute.levelScale)
-                                    var level = Math.trunc(level_raw)
-                                    var level_string =  roman_numerals[level]
-                                    if (attribute.maxLevel > level){
-                                        var to_next = (level_raw - level) * 100
-                                        var next_level_string = roman_numerals[level+1]
-                                    } else {
-                                        var to_next = 100
-                                        var next_level_string = "<span class='badge text-bg-warning'>max</span> " + level_string
-                                        level_string = ""
-                                    }
-                                } catch (undefined) {
-                                    var to_next = 0
-                                    var next_level_string = roman_numerals[1]
-                                    var level_string = ""
-                                }
-
-                                var value = attribute.baseValue
-                                if (level != 0){
-                                    switch(attribute.modifier.type.split(".").at(-1)){
-                                        case "AddValueTotal":
-                                            attribute.modifier.steps.slice(0, level).forEach(step => {
-                                                value += step
-                                            })
-                                            break
-                                        case "MultiplyBase":
-                                            value *= attribute.modifier.steps[level - 1]
-                                            break
-                                    }
-                                }
-
-                                let row = ability_table.insertRow(-1)
-                                row.innerHTML = `
-                                    <td>
-                                        <div class="d-flex mb-2 " style="width: 100%; justify-content: space-between;">
-                                            <span class" d-inline-block">${level_string}</span>
-                                            <span class="d-inline-block">${attribute.name}: ${value}${attribute.type.split(".").at(-1) === "CooldownProperty" ? "s" : ""}</span>
-                                            <span class="d-inline-block">${next_level_string}</span>
-                                        </div>
-                                        <div class="progress" role="progressbar" aria-label="${attribute.name} Fortschritt" aria-valuenow="${to_next}" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar" style="width: ${to_next}%">${Math.round(to_next)}%</div>
-                                        </div>
-                                    </td>
-                                `
+                                let attribute_name = attribute.name.replace(/ /g, "_").toLowerCase()
+                                add_attribute(attribute, player.heroes[hero][ability][attribute_name].experiencePoints, ability_table)
                             }
                         }
                     }
@@ -210,6 +144,90 @@ async function load_stats(id=""){
         document.getElementById("stats_spinner").classList.add("d-none")
         document.getElementById("stats_data").classList.remove("d-none")
     }
+}
+
+function add_ability(ability, div){
+    var ability_display = ability.split("_").map(part => {
+        return part.charAt(0).toUpperCase() + part.slice(1)
+    }).join(" ")
+
+    div.innerHTML += `
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${ability}_item" aria-expanded="false" aria-controls="${ability}_item">
+                ${ability_display}
+                </button>
+            </h2>
+            <div id="${ability}_item" class="accordion-collapse collapse" data-bs-parent="#${div.id}">
+                <div class="accordion-body">
+                    <table class="table table-border" id="${ability}_table" style="width: 100%;"></table>
+                </div>
+            </div>
+        </div>
+    `
+
+    return document.getElementById(`${ability}_table`)
+}
+
+function add_attribute(attribute, xp, table){
+    let roman_numerals = {
+        0: "",
+        1: "I",
+        2: "II",
+        3: "III",
+        4: "IV",
+        5: "V",
+        6: "VI",
+        7: "VII",
+        8: "VIII",
+        9: "IX",
+        10: "X"
+    }
+    try {
+        var level_raw = Math.cbrt(xp / attribute.levelScale)
+        var level = Math.trunc(level_raw)
+        var level_string =  roman_numerals[level]
+        if (attribute.maxLevel > level){
+            var to_next = (level_raw - level) * 100
+            var next_level_string = roman_numerals[level+1]
+        } else {
+            var to_next = 100
+            var next_level_string = "<span class='badge text-bg-warning'>max</span> " + level_string
+            level_string = ""
+        }
+    } catch (undefined) {
+        var to_next = 0
+        var next_level_string = roman_numerals[1]
+        var level_string = ""
+    }
+
+    var value = attribute.baseValue
+    if (level != 0){
+        switch(attribute.modifier.type.split(".").at(-1)){
+            case "AddValueTotal":
+                attribute.modifier.steps.slice(0, level).forEach(step => {
+                    value += step
+                })
+                break
+            case "MultiplyBase":
+                value *= attribute.modifier.steps[level - 1]
+                break
+        }
+    }
+
+    let row = table.insertRow(-1)
+    row.innerHTML = `
+        <td>
+            <div class="d-flex mb-2" style="justify-content: space-between;">
+                <span class"d-inline-block">${level_string}</span>
+                <span class="d-inline-block">${attribute.name}: ${value}${attribute.type.split(".").at(-1) == "CooldownProperty" ? "s" : ""}</span>
+                <span class="d-inline-block">${next_level_string}</span>
+            </div>
+            <div class="progress" role="progressbar" aria-label="${attribute.name} Fortschritt" aria-valuenow="${to_next}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar" style="width: ${to_next}%">${Math.round(to_next)}%</div>
+            </div>
+        </td>
+    `
 }
 
 function to_page(page){
@@ -266,21 +284,40 @@ function loading_rank(fn){
         button.disabled = true
         button.innerHTML = `${spinner} Lade gerade...`
 
-        await fn.apply(this, arguments)
+        let status = await fn.apply(this, arguments)
 
-        if (rank_item_number >= 10){
-            document.querySelector("footer").style.removeProperty("positon")
-            document.querySelector("footer").style.removeProperty("bottom")
+        if (status == true){
+            button.innerHTML = "Ende erreicht"
+            return
         }
+
         button.disabled = false
         button.innerHTML = "Mehr laden"
     }
 }
 
-async function load_hero(hero){
-    const response = await fetch(`https://api.hglabor.de/ffa/hero/${hero}`)
-    if (!response.ok) throw new Error("Konnte Held*in nicht fetchen")
-    heroes[hero] = await response.json()
+async function load_heroes(){
+    const response = await fetch("https://api.hglabor.de/ffa/heroes")
+    if (!response.ok) throw new Error(`Konnte ${hero} Details nicht fetchen`)
+    const available_heroes = await response.json()
+    for (hero of available_heroes){
+        const response = await fetch(`https://api.hglabor.de/ffa/hero/${hero}`)
+        if (!response.ok) throw new Error(`Konnte ${hero} Details nicht fetchen`)
+        heroes[hero] = await response.json()
+
+        document.getElementById("hero_buttons").innerHTML += `
+            <button id="to_${hero}" type="button" class="btn btn-primary" onclick="to_hero('${hero}')">
+                ${hero.charAt(0).toUpperCase()+hero.slice(1)}
+            </button>
+        `
+        document.getElementById("hero_data").innerHTML += `
+            <div id="${hero}">
+                <div class="d-flex justify-content-center text-center">
+                    <div class="accordion m-4" id="${hero}_div"></div>
+                </div>
+            </div>
+        `
+    }
 }
 
 
@@ -302,8 +339,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     loading_rank(fill_rank)()
-
-    load_hero("aang")
-    load_hero("katara")
-    load_hero("toph")
+    
+    load_heroes()
 })
