@@ -27,6 +27,7 @@ html, body {
 }
 #stats_skin {
     margin: .75cm;
+    margin-right: .5cm;
     margin-left: 0;
 }
 .form-control, #stats_error, #rank_table_real, #main_stats_table {
