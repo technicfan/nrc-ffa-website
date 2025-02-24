@@ -121,84 +121,89 @@ async function load_stats(id=""){
             10: "X"
         }
         for (const hero in heroes){
-            var current = heroes[hero]
-            var abilities = current.properties
-            var div = document.getElementById(`${hero}_div`)
-            div.innerHTML = ""
-            for (const ability in abilities){
-                if (player.heroes[hero][ability]){
-                    var attributes = abilities[ability]
+            if (player.heroes[hero]){
+                document.getElementById(`to_${hero}`).disabled = false
+                var current = heroes[hero]
+                var abilities = current.properties
+                var div = document.getElementById(`${hero}_div`)
+                div.innerHTML = ""
+                for (const ability in abilities){
+                    if (player.heroes[hero][ability]){
+                        var attributes = abilities[ability]
 
-                    var ability_display = ability.split("_").map(part => {
-                        return part.charAt(0).toUpperCase() + part.slice(1)
-                    }).join(" ")
+                        var ability_display = ability.split("_").map(part => {
+                            return part.charAt(0).toUpperCase() + part.slice(1)
+                        }).join(" ")
 
-                    div.innerHTML += `
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${ability}_item" aria-expanded="false" aria-controls="${ability}_item">
-                                ${ability_display}
-                                </button>
-                            </h2>
-                            <div id="${ability}_item" class="accordion-collapse collapse">
-                                <div class="accordion-body">
-                                    <table class="table table-border" id="${ability}_table" style="width: 100%;"></table>
+                        div.innerHTML += `
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${ability}_item" aria-expanded="false" aria-controls="${ability}_item">
+                                    ${ability_display}
+                                    </button>
+                                </h2>
+                                <div id="${ability}_item" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <table class="table table-border" id="${ability}_table" style="width: 100%;"></table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `
-                    var ability_table = document.getElementById(`${ability}_table`)
-                    for (const attribute of attributes){
-                        if (attribute.maxLevel != 0){
-                            try {
-                                var attribute_name = attribute.name.replace(/ /g, "_").toLowerCase()
-                                var level_raw = Math.cbrt(player.heroes[hero][ability][attribute_name].experiencePoints / attribute.levelScale)
-                                var level = Math.trunc(level_raw)
-                                var level_string =  roman_numerals[level]
-                                if (attribute.maxLevel > level){
-                                    var to_next = (level_raw - level) * 100
-                                    var next_level_string = roman_numerals[level+1]
-                                } else {
-                                    var to_next = 100
-                                    var next_level_string = "<span class='badge text-bg-warning'>max</span> " + level_string
-                                    level_string = ""
+                        `
+                        var ability_table = document.getElementById(`${ability}_table`)
+                        for (const attribute of attributes){
+                            if (attribute.maxLevel != 0){
+                                try {
+                                    var attribute_name = attribute.name.replace(/ /g, "_").toLowerCase()
+                                    var level_raw = Math.cbrt(player.heroes[hero][ability][attribute_name].experiencePoints / attribute.levelScale)
+                                    var level = Math.trunc(level_raw)
+                                    var level_string =  roman_numerals[level]
+                                    if (attribute.maxLevel > level){
+                                        var to_next = (level_raw - level) * 100
+                                        var next_level_string = roman_numerals[level+1]
+                                    } else {
+                                        var to_next = 100
+                                        var next_level_string = "<span class='badge text-bg-warning'>max</span> " + level_string
+                                        level_string = ""
+                                    }
+                                } catch (undefined) {
+                                    var to_next = 0
+                                    var next_level_string = roman_numerals[1]
+                                    var level_string = ""
                                 }
-                            } catch (undefined) {
-                                var to_next = 0
-                                var next_level_string = roman_numerals[1]
-                                var level_string = ""
-                            }
 
-                            var value = attribute.baseValue
-                            if (level != 0){
-                                switch(attribute.modifier.type.split(".").at(-1)){
-                                    case "AddValueTotal":
-                                        attribute.modifier.steps.slice(0, level).forEach(step => {
-                                            value += step
-                                        })
-                                        break
-                                    case "MultiplyBase":
-                                        value *= attribute.modifier.steps[level - 1]
-                                        break
+                                var value = attribute.baseValue
+                                if (level != 0){
+                                    switch(attribute.modifier.type.split(".").at(-1)){
+                                        case "AddValueTotal":
+                                            attribute.modifier.steps.slice(0, level).forEach(step => {
+                                                value += step
+                                            })
+                                            break
+                                        case "MultiplyBase":
+                                            value *= attribute.modifier.steps[level - 1]
+                                            break
+                                    }
                                 }
-                            }
 
-                            let row = ability_table.insertRow(-1)
-                            row.innerHTML = `
-                                <td>
-                                    <div class="d-flex mb-2 " style="width: 100%; justify-content: space-between;">
-                                        <span class" d-inline-block">${level_string}</span>
-                                        <span class="d-inline-block">${attribute.name}: ${value}${attribute.type.split(".").at(-1) === "CooldownProperty" ? "s" : ""}</span>
-                                        <span class="d-inline-block">${next_level_string}</span>
-                                    </div>
-                                    <div class="progress" role="progressbar" aria-label="${attribute.name} Fortschritt" aria-valuenow="${to_next}" aria-valuemin="0" aria-valuemax="100">
-                                        <div class="progress-bar" style="width: ${to_next}%">${Math.round(to_next)}%</div>
-                                    </div>
-                                </td>
-                            `
+                                let row = ability_table.insertRow(-1)
+                                row.innerHTML = `
+                                    <td>
+                                        <div class="d-flex mb-2 " style="width: 100%; justify-content: space-between;">
+                                            <span class" d-inline-block">${level_string}</span>
+                                            <span class="d-inline-block">${attribute.name}: ${value}${attribute.type.split(".").at(-1) === "CooldownProperty" ? "s" : ""}</span>
+                                            <span class="d-inline-block">${next_level_string}</span>
+                                        </div>
+                                        <div class="progress" role="progressbar" aria-label="${attribute.name} Fortschritt" aria-valuenow="${to_next}" aria-valuemin="0" aria-valuemax="100">
+                                            <div class="progress-bar" style="width: ${to_next}%">${Math.round(to_next)}%</div>
+                                        </div>
+                                    </td>
+                                `
+                            }
                         }
                     }
                 }
+            } else {
+                document.getElementById(`to_${hero}`).disabled = true
             }
         } 
 
