@@ -84,13 +84,16 @@ function add_ability(ability, div){
     div.innerHTML += `
         <div class="accordion-item">
             <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${ability}_item" aria-expanded="false" aria-controls="${ability}_item">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#${ability}_item" 
+                        aria-expanded="false" aria-controls="${ability}_item"
+                >
                 ${ability_display}
                 </button>
             </h2>
             <div id="${ability}_item" class="accordion-collapse collapse" data-bs-parent="#${div.id}">
                 <div class="accordion-body">
-                    <table class="table table-border" id="${ability}_table" style="width: 100%;"></table>
+                    <table class="table table-borderless" id="${ability}_table" style="width: 100%;"></table>
                 </div>
             </div>
         </div>
@@ -143,11 +146,19 @@ function add_attribute(attribute, xp, table){
     let row = table.insertRow(-1)
     row.innerHTML = `
         <td>
-            <div class="d-flex mb-2" style="justify-content: space-between;">
-                <span class"d-inline-block">${level_string}</span>
-                <span class="d-inline-block">${attribute.name}: ${value}${attribute.type.split(".").at(-1) == "CooldownProperty" ? "s" : ""}</span>
-                <span class="d-inline-block">${next_level_string}</span>
-            </div>
+            <table class="text-nowrap mb-2" style="width: 100%;">
+                <tr>
+                    <td class="text-start" style="min-width: 20%;">
+                        ${level_string}
+                    </td>
+                    <td class="text-center">
+                        ${attribute.name}: ${value}${attribute.type.split(".").at(-1) == "CooldownProperty" ? "s" : ""}
+                    </td>
+                    <td class="text-end" style="min-width: 20%;">
+                        ${next_level_string}
+                    </td>
+                </tr>
+            </table>
             <div class="progress" role="progressbar" aria-label="${attribute.name} Fortschritt" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">
                 <div class="progress-bar" style="width: ${progress}%">${Math.round(progress)}%</div>
             </div>
