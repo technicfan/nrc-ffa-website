@@ -52,8 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     })
 
-    to_page("rank")
-
     loading_rank(fill_rank)()
     
     load_heroes()
