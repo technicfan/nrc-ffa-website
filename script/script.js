@@ -25,16 +25,7 @@ async function fill_rank(){
         row.className = "rank_row"
         row.innerHTML = row_html
     })
-    document.querySelectorAll(".rank_name").forEach(name => { name.addEventListener("click", event => {
-        if (event.target.innerText){
-            var field = event.target
-        } else {
-            var field = event.target.parentElement
-        }
-        document.getElementById("input").value = field.innerText
-        to_page("stats")
-        load_stats(field.dataset.id)
-    })})
+
     rank_item_number += 10
 
     if (rank_item_number - 100 * (page - 1) > list.length){
@@ -42,6 +33,10 @@ async function fill_rank(){
     } else {
         return false
     }
+}
+ function stats_from_rank(id){
+    to_page("stats")
+    load_stats(id)
 }
 
 async function add_rank_item(number, player){
@@ -60,7 +55,7 @@ async function add_rank_item(number, player){
     html = `
     <tr>
         <td class="align-middle"><span ${color}>${number}</span></td>
-        <td class="rank_name align-middle text-start" data-id="${name[0]}">
+        <td class="align-middle text-start" onclick="stats_from_rank('${name[0]}')">
             <image class="rounded d-inline" alt="Minecraft Kopf von ${name[1]}"
                    src="https://www.mc-heads.net/avatar/${name[0]}/35"
                    style="margin-right: 6pt;"
@@ -100,6 +95,10 @@ async function load_stats(id=""){
             document.getElementById("stats_error").classList.remove("d-none")
             return
         }
+
+        if (id){
+            document.getElementById("input").value = name
+        }
     
         document.getElementById("stats_name").innerText = name
         document.getElementById("stats_xp").innerText = player.xp
@@ -110,7 +109,7 @@ async function load_stats(id=""){
         document.getElementById("stats_bounty").innerText = player.bounty
 
         document.getElementById("stats_skin").src = `https://www.mc-heads.net/body/${id}/100`
-        document.getElementById("stats_skin").alt = `Minecraft Kopf von ${name}`
+        document.getElementById("stats_skin").alt = `Minecraft Skin von ${name}`
 
         // hero abilities
         var set_hero = true
@@ -129,15 +128,9 @@ async function load_stats(id=""){
                     if (player.heroes[hero][ability]){
                         var ability_table = add_ability(ability, div)
                         for (const attribute of abilities[ability]){
-                            if (attribute.maxLevel != 0){
-                                let attribute_name = attribute.name.replace(/ /g, "_").toLowerCase()
-                                var xp
-                                if (player.heroes[hero][ability][attribute_name]){
-                                    xp = player.heroes[hero][ability][attribute_name].experiencePoints
-                                } else {
-                                    xp = 0
-                                }
-                                add_attribute(attribute, xp, ability_table)
+                            var attribute_name = attribute.name.replace(/ /g, "_").toLowerCase()
+                            if (attribute.maxLevel != 0 && player.heroes[hero][ability][attribute_name]){
+                                add_attribute(attribute, player.heroes[hero][ability][attribute_name].experiencePoints, ability_table)
                             }
                         }
                     }
