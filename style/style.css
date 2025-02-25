@@ -34,3 +34,6 @@ html, body {
 #rank_table_real {
     margin: 0;
 }
+.text-bg-none {
+    color: currentColor;
+}
