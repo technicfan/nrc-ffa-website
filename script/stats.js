@@ -15,6 +15,8 @@ async function load_stats(request=""){
             if (!response.ok) throw new Error(`Stats für ${input} nicht gefunden`)
             var player = await response.json()
         } catch {
+            icon = ""
+            to_page("stats")
             document.getElementById("stats_spinner").classList.add("d-none")
             document.getElementById("stats_error").innerText = `${input}
             existiert nicht
