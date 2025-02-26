@@ -37,6 +37,7 @@ let rank_item_number = 0;
 let page = 1;
 let list;
 let sort = "kills";
+let steps = parseInt(document.getElementById("rank_steps").value)
 // stats
 let heroes = {};
 let icon;
@@ -50,6 +51,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (event.key === "Enter") {
             load_stats();
         }
+    });
+
+    document.getElementById("rank_steps").addEventListener("change", e => {
+        steps = parseInt(e.target.value)
+        loading_rank(new_sort_rank)(document.getElementById(sort));
     });
 
     loading_rank(fill_rank)();

@@ -26,7 +26,13 @@
                         <div class="table-responsive text-center">
                             <table id="rank_table_real" class="table table-striped d-inline-block text-nowrap">
                                 <thead>
-                                    <th></th>
+                                    <th>
+                                        <select id="rank_steps" class="form-select form-select-sm">
+                                            <option value=10 selected>10</option>
+                                            <option value=50>50</option>
+                                            <option value=100>100</option>
+                                        </select>
+                                    </th>
                                     <th class="text-center">Spieler*in</th>
                                     <th class="rank_col text-center" id="kills" onclick="loading_rank(new_sort_rank)(this)">Kills</th>
                                     <th class="rank_col text-center" id="xp" onclick="loading_rank(new_sort_rank)(this)">XP</th>

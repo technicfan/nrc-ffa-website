@@ -30,7 +30,7 @@ async function fill_rank(){
     }
     var start = rank_item_number - (page - 1) * 100;
     let rows_html = await Promise.all(
-        list.slice(start, start + 10).map(async (item, index) => {
+        list.slice(start, start + steps).map(async (item, index) => {
             html = await add_rank_item(index + 1 + rank_item_number, item);
             return html;
         })
@@ -42,7 +42,7 @@ async function fill_rank(){
         row.innerHTML = row_html;
     })
 
-    rank_item_number += 10;
+    rank_item_number += steps;
 
     if (rank_item_number - 100 * (page - 1) > list.length){
         return true;
@@ -102,7 +102,6 @@ async function new_sort_rank(e){
     e.style.setProperty("text-decoration", "underline");
     
     rank_item_number = 0;
-    document.getElementById("load_more").classList.remove("d-none");
     if (e.id != sort || page > 1){
         list = await load_top(e.id);
         sort = e.id;
