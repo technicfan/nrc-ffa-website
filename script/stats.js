@@ -120,11 +120,11 @@ function add_attribute(attribute, xp, table){
     };
 
     var level = Math.trunc(Math.cbrt(xp / attribute.levelScale));
-    var level_string =  roman_numerals[level];
+    var level_string = roman_numerals[level];
     if (attribute.maxLevel > level){
         //                XP seit dem letzten Levelaufstieg            XP, das vom aktuellen bis zum nächsten Level benötigt wird            %
         var progress = (xp - attribute.levelScale * level**3) / (attribute.levelScale * (level + 1)**3 - attribute.levelScale * level**3) * 100;
-        var next_level_string = roman_numerals[level+1];
+        var next_level_string = roman_numerals[level + 1];
     } else {
         var progress = 100;
         var next_level_string = "<span class='badge text-bg-warning'>max</span> " + level_string;

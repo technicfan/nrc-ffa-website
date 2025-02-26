@@ -22,22 +22,32 @@
                     </div>
                 </div>
                 <div id="rank">
-                    <div class="table-responsive text-center">
-                        <table id="rank_table_real" class="table table-striped d-inline-block text-nowrap">
-                            <thead>
-                                <th></th>
-                                <th class="text-center">Spieler*in</th>
-                                <th class="rank_col text-center" id="kills" onclick="loading_rank(new_sort_rank)(this)">Kills</th>
-                                <th class="rank_col text-center" id="xp" onclick="loading_rank(new_sort_rank)(this)">XP</th>
-                                <th class="rank_col text-center" id="currentKillStreak" onclick="loading_rank(new_sort_rank)(this)">Killstreak</th>
-                                <th class="rank_col text-center" id="bounty" onclick="loading_rank(new_sort_rank)(this)">Kopfgeld</th>
-                            </thead>
-                            <tbody id="rank_table">
-                            </tbody>
-                        </table>
+                    <div id="rank_data">
+                        <div class="table-responsive text-center">
+                            <table id="rank_table_real" class="table table-striped d-inline-block text-nowrap">
+                                <thead>
+                                    <th></th>
+                                    <th class="text-center">Spieler*in</th>
+                                    <th class="rank_col text-center" id="kills" onclick="loading_rank(new_sort_rank)(this)">Kills</th>
+                                    <th class="rank_col text-center" id="xp" onclick="loading_rank(new_sort_rank)(this)">XP</th>
+                                    <th class="rank_col text-center" id="currentKillStreak" onclick="loading_rank(new_sort_rank)(this)">Killstreak</th>
+                                    <th class="rank_col text-center" id="bounty" onclick="loading_rank(new_sort_rank)(this)">Kopfgeld</th>
+                                </thead>
+                                <tbody id="rank_table">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button id="load_more" class="btn btn-info" type="button" onclick="loading_rank(fill_rank)()">Mehr laden</button>
+                        </div>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button id="load_more" class="btn btn-info" type="button" onclick="loading_rank(fill_rank)()">Mehr laden</button>
+                        <div id="rank_error"
+                             class="m-5 d-none alert alert-warning text-center" 
+                             role="alert"
+                        >Fehler beim Laden der Rangliste<br>
+                         (<a class="link-underline link-underline-opacity-0" href="">Seite neuladen</a>)
+                        </div>
                     </div>
                 </div>
                 <div id="stats" class="d-none">
@@ -86,6 +96,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="d-flex justify-content-center">
+                            <div id="hero_error"
+                                 class="m-5 d-none alert alert-warning text-center" 
+                                 role="alert"
+                            >Fehler beim Laden der Helden<br>
+                             (<a class="link-underline link-underline-opacity-0" href="">Seite neuladen</a>)
+                            </div>
+                        </div>
                     </div>
                     <div id="stats_spinner" class="d-flex justify-content-center m-5 d-none">
                         <div class="spinner-border" role="status">
@@ -102,9 +120,9 @@
             </div>
             <footer>
                 <div class="d-flex justify-content-center">
-                    <a href="https://github.com/technicfan/nrc-ffa-website" target="_blank">GitHub</a>
+                    <a class="link-underline link-underline-opacity-0" href="https://github.com/technicfan/nrc-ffa-website" target="_blank">GitHub</a>
                     <span class="ms-1 me-1">•</span>
-                    <a href="https://norisk.gg" target="_blank">NoRisk Client</a>
+                    <a class="link-underline link-underline-opacity-0" href="https://norisk.gg" target="_blank">NoRisk Client</a>
                 </div>
                 <div id="copyright" class="d-flex justify-content-center">
                     <p>Copyright (c) 2025 Technicfan</p>

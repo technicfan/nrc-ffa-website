@@ -1,13 +1,20 @@
 function loading_rank(fn){
     return async function(){
+        document.getElementById("rank_error").classList.add("d-none");
+        document.getElementById("rank_data").classList.remove("d-none");
         var button = document.getElementById("load_more");
         let spinner = "<span class='spinner-border spinner-border-sm' aria-hidden='true'></span>";
         button.disabled = true;
         button.innerHTML = `${spinner} Lade gerade...`;
 
-        let status = await fn.apply(this, arguments);
+        try {
+            var end = await fn.apply(this, arguments);
+        } catch {
+            document.getElementById("rank_data").classList.add("d-none");
+            document.getElementById("rank_error").classList.remove("d-none");
+        }
 
-        if (status == true){
+        if (end == true){
             button.innerHTML = "Ende erreicht";
             return;
         }

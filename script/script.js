@@ -41,7 +41,7 @@ let sort = "kills";
 let heroes = {};
 let icon;
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     color_scheme(dark_mode);
 
     dark_mode.addEventListener("change", value => color_scheme(value));
@@ -54,5 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loading_rank(fill_rank)();
     
-    load_heroes();
+    try {
+        await load_heroes();
+    } catch {
+        document.getElementById("hero_data").classList.add("d-none");
+        document.getElementById("hero_error").classList.remove("d-none");
+    }
 });
