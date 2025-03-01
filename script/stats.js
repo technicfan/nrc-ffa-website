@@ -135,9 +135,12 @@ function add_attribute(attribute, xp, table){
     if (level != 0){
         switch(attribute.modifier.type.split(".").at(-1)){
             case "AddValueTotal":
+                // calculating in programming is weird
+                value *= 1000;
                 attribute.modifier.steps.slice(0, level).forEach(step => {
-                    value += step;
+                    value += step * 1000;
                 });
+                value /= 1000;
                 break;
             case "MultiplyBase":
                 value *= attribute.modifier.steps[level - 1];
