@@ -68,7 +68,7 @@ async function add_rank_item(number, player){
         <td class="align-middle"><span ${color}>${number}</span></td>
         <td class="rank_name align-middle text-start" onclick="stats_from_rank('${name[0]}')">
             <image class="rounded d-inline" alt="Minecraft Kopf von ${name[1]}"
-                   src="https://www.mc-heads.net/avatar/${name[0]}/35"
+                   src="https://www.mc-heads.net/avatar/${name[1]}/35"
                    style="margin-right: 6pt;"
             >${name[1]}
         </td>
